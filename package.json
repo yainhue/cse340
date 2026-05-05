@@ -1,0 +1,28 @@
+{
+  "name": "cse340",
+  "version": "1.0.0",
+  "description": "cse340 course repo",
+  "homepage": "https://github.com/yainhue/cse340#readme",
+  "bugs": {
+    "url": "https://github.com/yainhue/cse340/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yainhue/cse340.git"
+  },
+  "license": "ISC",
+  "author": "Yain Huento",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
