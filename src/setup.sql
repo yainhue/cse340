@@ -67,3 +67,52 @@ VALUES
 (3, 'Senior Care Visits', 'Volunteers visiting senior citizens to provide support.', 'Sunrise Retirement Home', '2026-09-08'),
 (3, 'Holiday Gift Program', 'Distributing gifts to children during the holidays.', 'Central Library', '2026-12-20');
 
+--- Create "categories" TABLE
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+--- Create "project_category" TABLE
+
+CREATE TABLE project_category (
+    project_id INT NOT NULL REFERENCES service_project(project_id),
+    category_id INT NOT NULL REFERENCES category(category_id),
+    PRIMARY KEY (project_id, category_id)
+);
+
+--- Insert categories
+
+INSERT INTO category (name)
+VALUES
+('Education'),
+('Health'),
+('Infrastructure'),
+('Environment');
+
+--- Link each service project with a category
+
+-- BrightFuture Builders projects (IDs 1–5)
+INSERT INTO project_category (project_id, category_id) VALUES (1, 3); -- Infrastructure
+INSERT INTO project_category (project_id, category_id) VALUES (2, 3); -- Infrastructure
+INSERT INTO project_category (project_id, category_id) VALUES (3, 1); -- Education
+INSERT INTO project_category (project_id, category_id) VALUES (4, 4); -- Environment
+INSERT INTO project_category (project_id, category_id) VALUES (5, 3); -- Infrastructure
+
+-- GreenHarvest Growers projects (IDs 6–10)
+INSERT INTO project_category (project_id, category_id) VALUES (6, 1); -- Education
+INSERT INTO project_category (project_id, category_id) VALUES (7, 4); -- Environment
+INSERT INTO project_category (project_id, category_id) VALUES (8, 1); -- Education
+INSERT INTO project_category (project_id, category_id) VALUES (9, 2); -- Health
+INSERT INTO project_category (project_id, category_id) VALUES (10, 4); -- Environment
+
+-- UnityServe Volunteers projects (IDs 11–15)
+INSERT INTO project_category (project_id, category_id) VALUES (11, 2); -- Health
+INSERT INTO project_category (project_id, category_id) VALUES (12, 2); -- Health
+INSERT INTO project_category (project_id, category_id) VALUES (13, 2); -- Health
+INSERT INTO project_category (project_id, category_id) VALUES (14, 1); -- Education
+INSERT INTO project_category (project_id, category_id) VALUES (15, 4); -- Environment
+
+
+
