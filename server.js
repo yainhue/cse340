@@ -1,10 +1,8 @@
+import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import express from 'express';
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import router from './src/routes.js';
 
 // Define the the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -21,7 +19,7 @@ const app = express();
   * Configure Express middleware
   */
 
-// [Global Middleware ]Serve static files from the public directory
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set EJS as the templating engine
@@ -44,57 +42,8 @@ app.use((req, res, next) => {
     next();
 });
 
-/**
- * Routes
- */
-app.get('/', async (req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
-});
-
-// COMMENTED OUT TO TEST ERROR HANDLING
-// app.get('/organizations', async (req, res) => {
-//     const title = 'Our Partner Organizations';
-
-//     const organizations = await getAllOrganizations();
-
-//     res.render('organizations', { title, organizations });
-// });
-
-// error handling test for /organizations route
-app.get('/organizations', async (req, res, next) => {
-    try {
-        const title = 'Our Partner Organizations';
-        const organizations = await getAllOrganizations();
-        res.render('organizations', { title, organizations });
-    } catch (err) {
-        console.error("Error en /organizations:", err);
-        next(err);
-    }
-});
-
-app.get('/projects', async (req, res) => {
-    const title = 'Service Projects';
-
-    const projects = await getAllProjects();
-
-    res.render('projects', { title, projects });
-});
-
-app.get('/categories', async (req, res) => {
-    const title = 'Categories';
-
-    const categories = await getAllCategories();
-
-    res.render('categories', { title, categories });
-});
-
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-});
+// Use the imported router to handle routes
+app.use(router);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
