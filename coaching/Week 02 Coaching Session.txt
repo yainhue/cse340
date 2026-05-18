@@ -1,0 +1,75 @@
+Week 02 Coaching Session Transcript
+
+Assistant: Welcome! Just to be clear from the start, this is a coaching session, not a test. It is perfectly okay—and even encouraged—to say "I don't know" or "I made a mistake." That's the fastest way we'll learn today.
+
+Assistant: I’ll be your supportive learning coach and software mentor, and together we’ll walk through the four required topics: Relational database design, Node.js data access logic, Express routing, and EJS templates. We’ll go one at a time, and I’ll only ask you a single question each turn so you can focus your thoughts.
+
+Assistant: Topic 1: Relational Database Design and Structure. Could you paste a snippet of your SQL schema (for example, the CREATE TABLE statements for service_project, organization, and category or the join table) and then explain why you chose that structure to represent the relationships?
+
+User: --- Create "categories" TABLE
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+--- Create "project_category" TABLE
+CREATE TABLE project_category (
+    project_id INT NOT NULL REFERENCES service_project(project_id),
+    category_id INT NOT NULL REFERENCES category(category_id),
+    PRIMARY KEY (project_id, category_id)
+);
+This two tables connect service_project and category in a N:M relationship. category only has two rows: the unique primary_key (ID) and a varchar(255) name. The linking table references the ID of the category and the ID of the project and links them together, assigning a category to each project.
+
+Assistant: Great explanation—you’ve clearly understood how the category and project_category tables establish the many-to-many relationship. By keeping service_project untouched and using the join table, you maintain flexibility and avoid redundancy. That’s exactly the right design choice.
+
+Assistant: Topic 2: Server-Side Data Access Logic (Node.js). Could you paste a snippet of your Node.js function that connects to the database and retrieves data (for example, a query that fetches projects along with their categories), and then explain why you structured the function that way?
+
+User: categories.js --- import db from './db.js'
+const getAllCategories = async () => {
+    const query = `
+        SELECT category_id, name
+      FROM public.category;
+    `;
+    const result = await db.query(query);
+    return result.rows;
+}
+export { getAllCategories }
+This js file imports all of the categories from the database making use of an async function that first defines the query to be used in a variable and then passes that query to the database using the pg library. the result is then returned and passed to the EJS template on server.js
+
+Assistant: Excellent breakdown—you’ve captured the essence of how your getAllCategories function works: defining the SQL query, executing it with pg, and returning the rows to be consumed by your server and eventually rendered in EJS. That’s a clean and modular approach.
+
+Assistant: Topic 3: Express Server Logic and Routing. Could you paste a snippet of one of your route handlers (for example, the route that serves the home page or the one that fetches categories) and then explain why you structured the path and handler logic the way you did?
+
+User: app.get('/categories', async (req, res) => {
+    const title = 'Categories';
+    const categories = await getAllCategories();
+    res.render('categories', { title, categories });
+});
+As you can see here, this route handler listens for "/categories" which takes you to the categories pages and defines the title of the webpage to be used in a EJS header partial. The categories are fetched using getAllCategories() and passed with the title using res.render.
+
+Assistant: That’s a solid route handler—you’re clearly connecting the data flow from your database function into the Express route and then rendering it with EJS. I like how you’re passing both the title and categories into the template, which makes your view flexible and dynamic.
+
+Assistant: Topic 4: Client-Side Rendering (EJS Templates). Could you paste a snippet of your EJS template code (for example, how you loop through categories or display the title) and then explain why you chose that particular EJS syntax to render the data?
+
+User: <%- include('partials/header') %>
+    <main>
+        <h1>
+            <%= title %>
+        </h1>
+        <h2>Available Categories</h2>
+        <ul>
+            <% categories.forEach((category)=> { %>
+                <li>
+                    <strong>
+                        <%= category.name %>
+                    </strong>
+                </li>
+                <% }); %>
+        </ul>
+    </main>
+    <%- include('partials/footer') %>
+Ok so what this EJS template does is that, first, it "loads" the header partial, then it shows the actual page content using a "foreach" loop that loops through each category on the database and displays their names in a neat list.
+
+Assistant: That’s a clear and well-structured EJS template—you’re including partials for reuse, displaying the dynamic title, and looping through the categories with <% %> logic. Using <%= category.name %> ensures the values are safely escaped, which is a good practice for user-facing content.
+
+Assistant: ✅ We’ve now covered all four required topics: Database design, Node.js data access logic, Express routing, and EJS templates. That completes the coaching session.
