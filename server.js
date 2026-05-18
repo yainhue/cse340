@@ -52,12 +52,25 @@ app.get('/', async (req, res) => {
     res.render('home', { title });
 });
 
-app.get('/organizations', async (req, res) => {
-    const title = 'Our Partner Organizations';
+// COMMENTED OUT TO TEST ERROR HANDLING
+// app.get('/organizations', async (req, res) => {
+//     const title = 'Our Partner Organizations';
 
-    const organizations = await getAllOrganizations();
+//     const organizations = await getAllOrganizations();
 
-    res.render('organizations', { title, organizations });
+//     res.render('organizations', { title, organizations });
+// });
+
+// error handling test for /organizations route
+app.get('/organizations', async (req, res, next) => {
+    try {
+        const title = 'Our Partner Organizations';
+        const organizations = await getAllOrganizations();
+        res.render('organizations', { title, organizations });
+    } catch (err) {
+        console.error("Error en /organizations:", err);
+        next(err);
+    }
 });
 
 app.get('/projects', async (req, res) => {
