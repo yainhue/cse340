@@ -17,10 +17,20 @@
         <p><strong>Location:</strong> <em>
                 <%= project.location %>
             </em></p>
-        <a href="/organization/<%= project.organization_id %>">
-            <strong>Organization:</strong> <em>
-                <%= project.organization_name %>
-            </em>
-        </a>
+
+        <p><strong>Organization:</strong> <a href="/organization/<%= project.organization_id %>"><em>
+                    <%= project.organization_name %>
+                </em></a></p>
+
+        <p><strong>Categories:</strong></p>
+        <ul>
+            <% categories.forEach((category)=> { %>
+                <li>
+                    <a href="/category/<%= category.category_id %>">
+                        <%= category.category_name %>
+                    </a>
+                </li>
+                <% }); %>
+        </ul>
     </main>
     <%- include('partials/footer') %>

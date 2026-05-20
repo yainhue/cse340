@@ -4,10 +4,13 @@
     --nav-bg: #102a43;
     --nav-text: #ffffff;
     --primary: #1f78b4;
+    /* contraste alto */
     --secondary: #2a9d8f;
-    --accent: #f4a261;
+    --accent: #d35400;
+    /* más oscuro para contraste AA */
     --text: #102a43;
-    --muted: #475569;
+    --muted: #374151;
+    /* más oscuro para contraste AAA */
     --border: rgba(16, 42, 67, 0.12);
     --radius: 18px;
     --max-width: 1080px;
@@ -39,8 +42,9 @@ img {
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+    color: var(--primary);
+    text-decoration: underline;
+    /* asegura que se distingan del texto */
 }
 
 button,
@@ -80,13 +84,16 @@ nav a {
     padding: 0.65rem 0.9rem;
     border-radius: 999px;
     transition: background 0.2s ease, transform 0.2s ease;
+    text-decoration: underline;
 }
 
 nav a:hover,
 nav a:focus-visible {
     background: rgba(255, 255, 255, 0.14);
-    outline: none;
     transform: translateY(-1px);
+    outline: 2px solid var(--accent);
+    /* indicador de foco accesible */
+    outline-offset: 2px;
 }
 
 main {
@@ -97,6 +104,21 @@ main {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: 0 20px 60px rgba(16, 42, 67, 0.08);
+}
+
+main a {
+    color: var(--primary);
+    font-weight: 500;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+    text-decoration: underline;
+}
+
+main a:hover,
+main a:focus-visible {
+    color: var(--accent);
+    text-shadow: 0 2px 6px rgba(211, 84, 0, 0.4);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 h1,
