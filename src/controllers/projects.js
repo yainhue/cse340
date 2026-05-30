@@ -88,17 +88,29 @@ const showEditProjectForm = async (req, res) => {
 };
 
 const processEditProjectForm = async (req, res) => {
-    const { title, description, location, date, organizationId } = req.body;
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // Loop through validation errors and flash them
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
 
-    try {
-        await updateProject(req.params.id, organizationId, title, description, location, date);
+        // Redirect back to the new project form
+        return res.redirect('/new-project');
 
-        req.flash('success', 'Project updated successfully!');
-        res.redirect(`/project/${req.params.id}`);
-    } catch (error) {
-        console.error('Error updating project:', error);
-        req.flash('error', 'There was an error updating the project.');
-        res.redirect(`/edit-project/${req.params.id}`);
+        const { title, description, location, date, organizationId } = req.body;
+
+        try {
+            await updateProject(req.params.id, organizationId, title, description, location, date);
+
+            req.flash('success', 'Project updated successfully!');
+            res.redirect(`/project/${req.params.id}`);
+        } catch (error) {
+            console.error('Error updating project:', error);
+            req.flash('error', 'There was an error updating the project.');
+            res.redirect(`/edit-project/${req.params.id}`);
+        }
     }
 };
 
