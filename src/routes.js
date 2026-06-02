@@ -1,6 +1,9 @@
 import express from 'express';
 
-import { showIndexPage } from './controllers/index.js';
+import {
+    showIndexPage
+} from './controllers/index.js';
+
 import {
     showOrganizationsPage,
     showOrganizationDetailsPage,
@@ -33,7 +36,21 @@ import {
     processEditCategoryForm
 }
     from './controllers/categories.js';
-import { testErrorPage } from './controllers/errors.js';
+
+import {
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout,
+    requireLogin,
+    showDashboard
+}
+    from './controllers/users.js';
+
+import {
+    testErrorPage
+} from './controllers/errors.js';
 
 const router = express.Router();
 
@@ -104,6 +121,21 @@ router.get('/edit-category/:id', showEditCategoryForm);
 // Route to handle the edit category form submission
 router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
+// --- USER ROUTES ---
+
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+
+// User login routes
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
+
+// Dashboard route (protected)
+router.get('/dashboard', requireLogin, showDashboard);
+
+// --- MISC. ROUTES ---
 
 // error handling routes
 router.get('/test-error', testErrorPage);

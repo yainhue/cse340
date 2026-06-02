@@ -17,6 +17,14 @@
             <li><a href="/organizations">Organizations</a></li>
             <li><a href="/projects">Projects</a></li>
             <li><a href="/categories">Categories</a></li>
+            <% if (!isLoggedIn) { %>
+                <% console.log('User is not logged in'); %>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <% } else { %>
+                        <% console.log('User is logged in'); %>
+                            <li><a href="/logout">Logout</a></li>
+                            <% } %>
         </ul>
     </nav>
 
