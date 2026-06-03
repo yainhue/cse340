@@ -65,10 +65,11 @@ app.use((req, res, next) => {
         res.locals.isLoggedIn = true;
     }
 
+    res.locals.user = req.session.user || null;
+
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
-
 // Use the imported router to handle routes
 app.use(router);
 
