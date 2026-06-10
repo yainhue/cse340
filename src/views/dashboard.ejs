@@ -6,12 +6,34 @@
         </h1>
 
         <h2>Dashboard</h2>
-        <p>Name: <%= name %>
+        <p>Name: <%= userName %>
                 <%console.log("session.user:")%>
                     <%console.log(user)%>
         </p>
-        <p>Username: <%= email %>
+        <p>Username: <%= userEmail %>
         </p>
+
+        <ul class="dashboard-projects">
+            <% projects.forEach((project)=> { %>
+                <li class="dashboard-project">
+                    <div>
+                        <a href="/project/<%= project.project_id %>">
+                            <strong>
+                                <%= new Date(project.project_date).toLocaleDateString('en-US') %>
+                            </strong> :
+                            <%= project.title %>
+                        </a>
+                        <a href="/organization/<%= project.organization_id %>">
+                            <em>(<%= project.name %>)</em>
+                        </a>
+                    </div>
+                    <form action="/removefrom/<%= project.project_id %>" method="POST">
+                        <button type="submit">Remove myself from this project</button>
+                    </form>
+                </li>
+                <% }) %>
+        </ul>
+
 
         <% if (user && user.role_name==='admin' ) { %>
             <p><a href="/users">View Users</a></p>

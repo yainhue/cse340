@@ -1,7 +1,16 @@
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
 // Import any needed model functions
-import { getAllProjects, getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
+import {
+    getAllProjects,
+    getUpcomingProjects,
+    getProjectDetails,
+    createProject,
+    updateProject,
+    signUpForProject,
+    isUserVolunteer,
+    removeFromProject
+} from '../models/projects.js';
 import { getAllCategoriesByProjectId } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { body, validationResult } from 'express-validator';
@@ -39,8 +48,14 @@ const showProjectDetailsPage = async (req, res) => {
     const project = await getProjectDetails(req.params.id);
     const title = 'Project Details';
     const categories = await getAllCategoriesByProjectId(req.params.id);
+    let isVolunteer = false;
 
-    res.render('project', { title, project, categories });
+    // if the user is logged in, check if they are a volunter
+    if (req.session.user) {
+        isVolunteer = await isUserVolunteer(project.project_id, req.session.user.user_id);
+    }
+
+    res.render('project', { title, project, categories, isVolunteer });
 };
 
 const showNewProjectForm = async (req, res) => {
@@ -114,5 +129,53 @@ const processEditProjectForm = async (req, res) => {
     }
 };
 
+const processUserSingUp = async (req, res) => {
+    const project = await getProjectDetails(req.params.id);
+    const projectId = project.project_id
+    const userId = req.session.user.user_id;
+
+    try {
+        signUpForProject(projectId, userId)
+        req.flash('success', 'You have successfully signed up for the project!');
+    } catch (error) {
+        console.error('Error signing up for project:', error);
+        req.flash('error', 'Could not sign up for the project. Please try again.');
+    }
+
+    // this controller should not be in charge of rendering the projectDetails page, so call the
+    // corresponding controller instead by redirecting the user
+    res.redirect(`/project/${projectId}`);
+}
+
+const processVolunteerRemoval = async (req, res) => {
+    const project = await getProjectDetails(req.params.id);
+    const projectId = project.project_id
+    const userId = req.session.user.user_id;
+
+    try {
+
+        removeFromProject(projectId, userId)
+        req.flash('success', 'You have successfully been removed from the project!');
+    } catch (error) {
+        console.error('Error removing user from the project:', error);
+        req.flash('error', 'We could not remove you from the project. Please try again.');
+    }
+
+    // this controller should not be in charge of rendering the projectDetails page, so call the
+    // corresponding controller instead by redirecting the user
+    res.redirect(`/project/${projectId}`);
+}
+
+
 // Export any controller functions
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation };
+export {
+    showProjectsPage,
+    showProjectDetailsPage,
+    showNewProjectForm,
+    processNewProjectForm,
+    showEditProjectForm,
+    processEditProjectForm,
+    projectValidation,
+    processUserSingUp,
+    processVolunteerRemoval
+};

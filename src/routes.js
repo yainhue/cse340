@@ -21,7 +21,9 @@ import {
     projectValidation,
     processNewProjectForm,
     showEditProjectForm,
-    processEditProjectForm
+    processEditProjectForm,
+    processUserSingUp,
+    processVolunteerRemoval
 } from './controllers/projects.js';
 
 import {
@@ -102,6 +104,12 @@ router.post('/new-project', requireRole("admin"), projectValidation, processNewP
 // Routes to handle the assign categories to project form
 router.get('/assign-categories/:projectId', requireRole("admin"), showAssignCategoriesForm);
 router.post('/assign-categories/:projectId', requireRole("admin"), processAssignCategoriesForm);
+
+// Route to handle project volunteer singup
+router.post("/signup/:id", requireLogin, processUserSingUp);
+
+// Route to handle project volunteer removal
+router.post("/removefrom/:id", requireLogin, processVolunteerRemoval);
 
 // --- CATEGORIES ROUTES ---
 

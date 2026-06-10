@@ -36,5 +36,18 @@
             <a href="/edit-project/<%= project.project_id %>">Edit Project</a>
             <a href="/assign-categories/<%= project.project_id %>">Assign Categories</a>
             <% } %>
+                <% if (user && isVolunteer==false) { %>
+                    <form action="/signup/<%= project.project_id %>" method="POST">
+                        <button type="submit">Sign Up as Volunteer</button>
+                    </form>
+
+                    <% } %>
+                        <% if (user && isVolunteer==true) { %>
+                            <p>You are already singed up for this project.</p>
+                            <form action="/removefrom/<%= project.project_id %>" method="POST">
+                                <button type="submit">Remove myself as a volunteer</button>
+                            </form>
+                            <% } %>
+
     </main>
     <%- include('partials/footer') %>

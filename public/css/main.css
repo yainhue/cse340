@@ -4,13 +4,10 @@
     --nav-bg: #102a43;
     --nav-text: #ffffff;
     --primary: #1f78b4;
-    /* contraste alto */
     --secondary: #2a9d8f;
     --accent: #d35400;
-    /* más oscuro para contraste AA */
     --text: #102a43;
     --muted: #374151;
-    /* más oscuro para contraste AAA */
     --border: rgba(16, 42, 67, 0.12);
     --radius: 18px;
     --max-width: 1080px;
@@ -44,7 +41,6 @@ img {
 a {
     color: var(--primary);
     text-decoration: underline;
-    /* asegura que se distingan del texto */
 }
 
 button,
@@ -92,7 +88,6 @@ nav a:focus-visible {
     background: rgba(255, 255, 255, 0.14);
     transform: translateY(-1px);
     outline: 2px solid var(--accent);
-    /* indicador de foco accesible */
     outline-offset: 2px;
 }
 
@@ -174,6 +169,137 @@ footer {
     color: var(--muted);
     background: transparent;
 }
+
+button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+button:hover,
+button:focus-visible {
+    background: var(--accent);
+    transform: translateY(-1px);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+form {
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+form button {
+    font-size: 0.95rem;
+}
+
+ul.projects-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+ul.projects-list li {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+ul.projects-list li a {
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+ul.projects-list li a:hover,
+ul.projects-list li a:focus-visible {
+    color: var(--accent);
+    text-shadow: 0 1px 4px rgba(211, 84, 0, 0.3);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.status-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--secondary);
+    margin: 1rem 0;
+}
+
+.dashboard-projects {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.dashboard-project {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 6px 20px rgba(16, 42, 67, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-project:hover,
+.dashboard-project:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 42, 67, 0.12);
+}
+
+.dashboard-project a {
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.dashboard-project a:hover,
+.dashboard-project a:focus-visible {
+    color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.dashboard-project button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.dashboard-project button:hover,
+.dashboard-project button:focus-visible {
+    background: var(--accent);
+    transform: translateY(-1px);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.dashboard-project:focus-within {
+    outline: 3px solid var(--secondary);
+    outline-offset: 3px;
+}
+
 
 /* Flash message styles */
 .alert {

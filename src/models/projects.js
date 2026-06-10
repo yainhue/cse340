@@ -130,5 +130,99 @@ const updateProject = async (projectId, organizationId, title, description, loca
   return result.rows[0].project_id;
 };
 
+const signUpForProject = async (projectId, userId) => {
+
+  const query = 'INSERT INTO project_volunteer (project_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING;'
+  const queryParams = [projectId, userId]
+
+  const result = await db.query(query, queryParams);
+
+  if (process.env.ENABLE_SQL_LOGGING === 'true') {
+    console.log('Signed up user to project with corresponding IDs:', userId, projectId);
+  }
+
+}
+
+const isUserVolunteer = async (projectId, userId) => {
+
+  const query = `
+    SELECT EXISTS (
+      SELECT 1 
+      FROM project_volunteer 
+      WHERE project_id = $1 AND user_id = $2
+    );
+  `;
+
+  const queryParams = [projectId, userId]
+
+  const result = await db.query(query, queryParams);
+
+  if (process.env.ENABLE_SQL_LOGGING === 'true') {
+    console.log('Is User Volunteer?', result.rows[0].exists);
+  }
+
+  return result.rows[0].exists;
+
+}
+
+const getProjectsforUser = async (userId) => {
+
+  const query = `
+    SELECT sp.project_id,
+           sp.title,
+           sp.project_date,
+           sp.organization_id,
+           o.name
+    FROM project_volunteer pv
+    JOIN service_project sp ON pv.project_id = sp.project_id
+    JOIN organizations o ON sp.organization_id = o.organization_id
+    WHERE pv.user_id = $1;
+  `;
+
+  const queryParams = [userId]
+
+  const result = await db.query(query, queryParams);
+
+  if (process.env.ENABLE_SQL_LOGGING === 'true') {
+    console.log('Obtained the projects for userId:', userId);
+    result.rows.forEach(element => {
+      console.log(element.title)
+    });
+    console.log()
+  }
+
+  return result.rows;
+
+}
+
+const removeFromProject = async (projectId, userId) => {
+
+  const query = `
+    DELETE FROM project_volunteer
+    WHERE project_id = $1 AND user_id = $2;
+  `;
+
+  const queryParams = [projectId, userId]
+
+  const result = await db.query(query, queryParams);
+
+  if (process.env.ENABLE_SQL_LOGGING === 'true') {
+    console.log('Removed user from project with corresponding IDs:', userId, projectId);
+  }
+
+}
+
+
 // Export the model functions
-export { getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails, createProject, updateProject };
+export {
+  getAllProjects,
+  getProjectsByOrganizationId,
+  getUpcomingProjects,
+  getProjectDetails,
+  createProject,
+  updateProject,
+  signUpForProject,
+  isUserVolunteer,
+  getProjectsforUser,
+  removeFromProject
+};

@@ -139,3 +139,10 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create join table for volunteer registrations
+CREATE TABLE project_volunteer (
+    project_id INT NOT NULL REFERENCES service_project(project_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, user_id)
+);
+
